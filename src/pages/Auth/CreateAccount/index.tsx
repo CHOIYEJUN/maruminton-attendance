@@ -42,7 +42,7 @@ const CreateAccount = () => {
           마루민턴 출석관리 시스템
         </Text>
         <Text textAlign={'center'} fontSize={'lg'} fontWeight={'bold'}>
-          로그인
+          회원가입
         </Text>
       </BasicFlex>
 

@@ -43,7 +43,7 @@ const Login = () => {
           마루민턴 출석관리 시스템
         </Text>
         <Text textAlign={'center'} fontSize={'lg'} fontWeight={'bold'}>
-          회원가입
+          로그인
         </Text>
       </BasicFlex>
 
