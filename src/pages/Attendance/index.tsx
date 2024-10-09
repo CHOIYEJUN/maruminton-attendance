@@ -1,27 +1,27 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage';
 import { useNavigate } from 'react-router';
 
-import { Box, Button, Flex, Img, Input, Text, useToast } from '@chakra-ui/react';
+import { Box, Button, Flex, Input, Spinner, Text, useToast } from '@chakra-ui/react';
 
-import { insertStemp } from '@services/attendnceService.ts';
+import { insertStemp } from '@services/attendnceService';
+
+import { auth } from '@utils/fireBase';
 
 const Attendance = () => {
-  const [imgFile, setImgFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
+  const [imgFile, setImgFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isLoding, setIsLoding] = useState(false);
 
   const toast = useToast();
   const navigate = useNavigate();
-  const lodingImg =
-    'https://firebasestorage.googleapis.com/v0/b/jujutoeicstudy.appspot.com/o/img%2Floding.gif?alt=media&token=8bcfd378-6519-4fbf-9df6-532a7d68277d';
 
   useEffect(() => {
     if (imgFile) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviewUrl(reader.result);
+        setPreviewUrl(reader.result as string);
       };
       reader.readAsDataURL(imgFile);
     } else {
@@ -41,10 +41,10 @@ const Attendance = () => {
     }
     setIsLoding(true);
 
-    const { url, imgPath } = await uploadImage(imgFile);
+    const callBack = await uploadImage(imgFile);
 
-    if (url) {
-      const insertStempState = await insertStemp(url, imgPath);
+    if (callBack) {
+      const insertStempState = await insertStemp(callBack?.url, callBack?.imgPath);
       setIsLoding(false);
       if (insertStempState === 'success') {
         navigate('/todayDoen');
@@ -79,14 +79,15 @@ const Attendance = () => {
     if (!file) return;
 
     const storage = getStorage();
-    const userId = localStorage.getItem('user_uid');
+    const userId = auth.currentUser?.uid;
     const today = new Date().toISOString().slice(0, 10);
-    const imgRef = ref(storage, `QuestImage/${userId}/${today}/myImg`);
+    const imgRef = ref(storage, `attendance/${userId}/${today}/myImg`);
 
     try {
       await uploadBytes(imgRef, file);
       const url = await getDownloadURL(imgRef);
       const imgPath = imgRef.fullPath;
+
       return { url, imgPath };
     } catch (error) {
       console.error('Upload error:', error);
@@ -100,9 +101,9 @@ const Attendance = () => {
     }
   };
 
-  const onFileChange = (e) => {
-    if (e.target.files[0]) {
-      setImgFile(e.target.files[0]);
+  const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImgFile('' || e.target.files[0]);
     }
   };
 
@@ -157,11 +158,7 @@ const Attendance = () => {
         출석하기
       </Button>
 
-      {isLoding && (
-        <Box position={'fixed'} top={'50%'} left={'50%'} transform={'translate(-50%, -50%)'} zIndex={'99999'}>
-          <Img w={'100px'} h={'100px'} src={lodingImg} />
-        </Box>
-      )}
+      {isLoding && <Spinner thickness={'4px'} speed={'0.65s'} emptyColor={'gray.200'} color={'blue.500'} size={'xl'} />}
     </Flex>
   );
 };

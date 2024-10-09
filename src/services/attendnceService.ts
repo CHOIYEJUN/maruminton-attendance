@@ -5,11 +5,12 @@ import { DBservice, auth } from '@utils/fireBase';
 
 export const insertStemp = async (questImgUrl: string, questImgPath: string) => {
   try {
-    let userID;
+    const userId = auth.currentUser?.uid;
+    const nowData = getNowData();
     const steampQuery = query(
-      collection(DBservice, 'stemp'),
-      where('uid', '==', userID),
-      where('attendData', '==', getNowData),
+      collection(DBservice, 'attend'),
+      where('uid', '==', userId),
+      where('attendData', '==', nowData),
     );
 
     const querySnapshot = await getDocs(steampQuery);
@@ -18,10 +19,10 @@ export const insertStemp = async (questImgUrl: string, questImgPath: string) => 
       return 'already';
     }
     // 새 문서 추가
-    await addDoc(collection(DBservice, 'stemp'), {
-      uid: auth.currentUser.uid,
-      userName: auth.currentUser.displayName,
-      attendData: getNowData,
+    await addDoc(collection(DBservice, 'attend'), {
+      uid: auth.currentUser?.uid,
+      userName: auth.currentUser?.displayName,
+      attendData: nowData,
       attendImgUrl: questImgUrl,
       attendImgPath: questImgPath,
     });
