@@ -25,8 +25,8 @@ const BottomMenu = () => {
           </Flex>
         </Box>
       </NavLink>
-      <NavLink to={'/status'}>
-        <Box color={location.pathname === '/status' ? 'white' : 'black'}>
+      <NavLink to={'/attendList'}>
+        <Box color={location.pathname === '/attendList' ? 'white' : 'black'}>
           <Flex direction={'column'} align={'center'}>
             <FaListAlt size={'24px'} />
             <Text fontSize={'xs'}>출석현황</Text>

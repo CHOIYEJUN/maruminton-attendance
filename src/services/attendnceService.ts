@@ -32,3 +32,11 @@ export const insertStemp = async (questImgUrl: string, questImgPath: string) => 
     return 'fail';
   }
 };
+
+export const getAttendList = async () => {
+  const userId = auth.currentUser?.uid;
+  const attendQuery = query(collection(DBservice, 'attend'), where('uid', '==', userId));
+  const querySnapshot = await getDocs(attendQuery);
+  const attendList = querySnapshot.docs.map((doc) => doc.data());
+  return attendList;
+};
