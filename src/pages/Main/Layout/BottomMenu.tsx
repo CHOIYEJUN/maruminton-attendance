@@ -1,11 +1,13 @@
 import { FaCheckCircle, FaListAlt, FaUser, FaUserShield } from 'react-icons/fa';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 
 import { Box, Flex, Text } from '@chakra-ui/react';
 
 import BasicFlex from '@components/layout/BasicFlex';
 
 const BottomMenu = () => {
+  const location = useLocation();
+
   return (
     <BasicFlex
       direction={'horizontal'}
