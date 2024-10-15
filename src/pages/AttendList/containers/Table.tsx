@@ -1,6 +1,7 @@
 import { getAuth } from 'firebase/auth';
+import { FaUser } from 'react-icons/fa';
 
-import { Box, Button, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
+import { Box, Button, Icon, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 
 import { IAttendDetailDatas } from '@/types/attend/attendType';
 
@@ -27,20 +28,20 @@ const AttendListTable = (props: { data: IAttendDetailDatas[] }) => {
           <Table>
             <Thead>
               <Tr>
-                <Th sx={SIZE.TD_STYLE}>프로필 사진</Th>
-                <Th sx={SIZE.TD_STYLE}>이름(생년월일)</Th>
-                <Th sx={SIZE.TD_STYLE}>콕 제출 여부</Th>
+                <Th sx={SIZE.TD_STYLE}></Th>
+                <Th sx={SIZE.TD_STYLE}>이름</Th>
+                <Th sx={SIZE.TD_STYLE}>취소</Th>
               </Tr>
             </Thead>
             <Tbody>
               <Tr key={myAttendance.uid}>
-                <Td>
-                  <img src={''} alt={'Profile'} width={'50'} height={'50'} />
+                <Td sx={SIZE.TD_STYLE}>
+                  <Icon as={FaUser} />
                 </Td>
-                <Td>{`${myAttendance.userName}`}</Td>
-                <Td>
-                  <Button colorScheme={'red'} size={'sm'} onClick={() => handleCancel(myAttendance.uid)}>
-                    출석 취소하기
+                <Td sx={SIZE.TD_STYLE}>{`${myAttendance.userName}`}</Td>
+                <Td sx={SIZE.TD_STYLE}>
+                  <Button colorScheme={'red'} size={'xs'} onClick={() => handleCancel(myAttendance.uid)}>
+                    출석 취소
                   </Button>
                 </Td>
               </Tr>
@@ -53,16 +54,16 @@ const AttendListTable = (props: { data: IAttendDetailDatas[] }) => {
       <Table>
         <Thead>
           <Tr>
-            <Th>프로필 사진</Th>
-            <Th>이름(생년월일)</Th>
-            <Th>콕 제출 여부</Th>
+            <Th></Th>
+            <Th>이름</Th>
+            <Th>제출 여부</Th>
           </Tr>
         </Thead>
         <Tbody>
           {otherAttendance.map((item) => (
             <Tr key={item.uid}>
               <Td>
-                <img src={''} alt={'Profile'} width={'50'} height={'50'} />
+                <Icon as={FaUser} />
               </Td>
               <Td>{`${item.userName}`}</Td>
               <Td>
