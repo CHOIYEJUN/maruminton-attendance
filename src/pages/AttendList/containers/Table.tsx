@@ -4,6 +4,8 @@ import { Box, Button, Table, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 
 import { IAttendDetailDatas } from '@/types/attend/attendType';
 
+import { SIZE } from '@data/common';
+
 const AttendListTable = (props: { data: IAttendDetailDatas[] }) => {
   const { data } = props;
 
@@ -25,9 +27,9 @@ const AttendListTable = (props: { data: IAttendDetailDatas[] }) => {
           <Table>
             <Thead>
               <Tr>
-                <Th>프로필 사진</Th>
-                <Th>이름(생년월일)</Th>
-                <Th>콕 제출 여부</Th>
+                <Th sx={SIZE.TD_STYLE}>프로필 사진</Th>
+                <Th sx={SIZE.TD_STYLE}>이름(생년월일)</Th>
+                <Th sx={SIZE.TD_STYLE}>콕 제출 여부</Th>
               </Tr>
             </Thead>
             <Tbody>
