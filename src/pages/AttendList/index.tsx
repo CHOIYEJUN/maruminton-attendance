@@ -3,7 +3,7 @@ import { useRecoilState } from 'recoil';
 
 import { Flex } from '@chakra-ui/react';
 
-import Table from '@pages/AttendList/containers/Table';
+import AttendListTable from '@pages/AttendList/containers/Table';
 
 import { attendListState } from '@context/attend/attendState';
 
@@ -23,7 +23,7 @@ const AttendList = () => {
 
   return (
     <Flex direction={'column'} align={'center'} justify={'center'}>
-      <Table data={data} />
+      <AttendListTable data={data} />
     </Flex>
   );
 };
