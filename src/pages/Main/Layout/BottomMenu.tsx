@@ -35,8 +35,8 @@ const BottomMenu = () => {
           </Flex>
         </Box>
       </NavLink>
-      <NavLink to={'/profile'}>
-        <Box color={location.pathname === '/profile' ? 'white' : 'black'}>
+      <NavLink to={'/myPage'}>
+        <Box color={location.pathname === '/myPage' ? 'white' : 'black'}>
           <Flex direction={'column'} align={'center'}>
             <FaUser size={'24px'} />
             <Text fontSize={'xs'}>내정보</Text>

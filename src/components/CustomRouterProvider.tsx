@@ -5,9 +5,11 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { Flex } from '@chakra-ui/react';
 
+import Admin from '@pages/Admin';
 import AttendList from '@pages/AttendList';
 import Attendance from '@pages/Attendance';
 import Layout from '@pages/Main';
+import MyPage from '@pages/MyPage';
 
 const CustomRouterProvider = () => {
   const router = createBrowserRouter([
@@ -22,6 +24,14 @@ const CustomRouterProvider = () => {
         {
           path: 'attendList',
           element: <PrivateRoute element={<AttendList />} />,
+        },
+        {
+          path: 'myPage',
+          element: <PrivateRoute element={<MyPage />} />,
+        },
+        {
+          path: 'admin',
+          element: <PrivateRoute element={<Admin />} />,
         },
       ],
     },
