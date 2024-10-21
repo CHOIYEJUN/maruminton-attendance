@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { getAuth } from 'firebase/auth';
+import { addDoc, collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
 
 import {
   Box,
@@ -23,11 +24,10 @@ import {
 
 import { getNowData } from '@utils/dateUtil';
 
-// Assuming this function returns today's date in 'YYYY-MM-DD' format
-
 const Admin = () => {
   const auth = getAuth();
   const user = auth.currentUser;
+  const db = getFirestore();
 
   const [selectedDate, setSelectedDate] = useState(getNowData());
   const [attendanceList, setAttendanceList] = useState([]);
@@ -35,31 +35,15 @@ const Admin = () => {
   const [selectedProfile, setSelectedProfile] = useState(null);
 
   useEffect(() => {
-    // Fetch attendance data for the selected date
-    // This is a placeholder, replace with actual data fetching logic
     const fetchAttendanceData = async () => {
-      // Example data
-      const data = [
-        {
-          uid: '1',
-          name: 'John Doe',
-          birthdate: '1990-01-01',
-          profilePictureUrl: 'https://via.placeholder.com/50',
-          submissionStatus: true,
-        },
-        {
-          uid: '2',
-          name: 'Jane Smith',
-          birthdate: '1992-02-02',
-          profilePictureUrl: 'https://via.placeholder.com/50',
-          submissionStatus: false,
-        },
-      ];
+      const q = query(collection(db, 'attendance'), where('date', '==', selectedDate));
+      const querySnapshot = await getDocs(q);
+      const data = querySnapshot.docs.map((doc) => doc.data());
       setAttendanceList(data);
     };
 
     fetchAttendanceData();
-  }, [selectedDate]);
+  }, [selectedDate, db]);
 
   const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedDate(event.target.value);
@@ -70,14 +54,17 @@ const Admin = () => {
     onOpen();
   };
 
-  const handleSave = () => {
-    // Save logic here
-    console.log('Save attendance list');
+  const handleSave = async () => {
+    try {
+      await addDoc(collection(db, 'attendance'), { date: selectedDate, data: attendanceList });
+      console.log('Attendance list saved');
+    } catch (error) {
+      console.error('Error saving attendance list: ', error);
+    }
   };
 
   return (
     <Box>
-      {/* Profile Section */}
       <Flex alignItems={'center'} mb={4}>
         <Image
           borderRadius={'full'}
@@ -88,16 +75,12 @@ const Admin = () => {
         <Text ml={4}>{user?.displayName || 'Anonymous'}</Text>
       </Flex>
 
-      {/* Date Filter */}
       <Box mb={4}>
         <Select value={selectedDate} onChange={handleDateChange}>
-          {/* Populate with actual date options */}
           <option value={getNowData()}>{getNowData()}</option>
-          {/* Add more options as needed */}
         </Select>
       </Box>
 
-      {/* Attendance List */}
       <List spacing={2}>
         {attendanceList.map((attendee) => (
           <ListItem key={attendee.uid}>
@@ -112,12 +95,10 @@ const Admin = () => {
         ))}
       </List>
 
-      {/* Save Button */}
       <Button mt={4} colorScheme={'blue'} onClick={handleSave}>
         Save
       </Button>
 
-      {/* Profile Modal */}
       {selectedProfile && (
         <Modal isOpen={isOpen} onClose={onClose}>
           <ModalOverlay />
