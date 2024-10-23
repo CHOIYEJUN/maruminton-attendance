@@ -86,7 +86,7 @@ const Admin = () => {
           <ListItem key={attendee.uid}>
             <Flex alignItems={'center'}>
               <input type={'checkbox'} checked={attendee.submissionStatus} readOnly />
-              <Text ml={2}>{`${attendee.name} (${attendee.birthdate})`}</Text>
+              <Text ml={2}>{`${attendee.userNm} (${attendee.birth})`}</Text>
               <Button ml={2} onClick={() => handleProfileClick(attendee)}>
                 View Profile
               </Button>
