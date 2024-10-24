@@ -22,6 +22,9 @@ import {
   useDisclosure,
 } from '@chakra-ui/react';
 
+import { IAttendDetailDatas } from '@/types/attend/attendType';
+import { ICreateUserFieldProps } from '@/types/auth/createAccount';
+
 import { getNowData } from '@utils/dateUtil';
 
 const Admin = () => {
@@ -30,15 +33,15 @@ const Admin = () => {
   const db = getFirestore();
 
   const [selectedDate, setSelectedDate] = useState(getNowData());
-  const [attendanceList, setAttendanceList] = useState([]);
+  const [attendanceList, setAttendanceList] = useState<IAttendDetailDatas[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedProfile, setSelectedProfile] = useState(null);
+  const [selectedProfile, setSelectedProfile] = useState<ICreateUserFieldProps>(null);
 
   useEffect(() => {
     const fetchAttendanceData = async () => {
       const q = query(collection(db, 'attendance'), where('date', '==', selectedDate));
       const querySnapshot = await getDocs(q);
-      const data = querySnapshot.docs.map((doc) => doc.data());
+      const data: IAttendDetailDatas[] = querySnapshot.docs.map((doc) => doc.data());
       setAttendanceList(data);
     };
 
@@ -49,7 +52,7 @@ const Admin = () => {
     setSelectedDate(event.target.value);
   };
 
-  const handleProfileClick = (profile) => {
+  const handleProfileClick = (profile: ICreateUserFieldProps) => {
     setSelectedProfile(profile);
     onOpen();
   };
@@ -82,11 +85,11 @@ const Admin = () => {
       </Box>
 
       <List spacing={2}>
-        {attendanceList.map((attendee) => (
+        {attendanceList.map((attendee: IAttendDetailDatas) => (
           <ListItem key={attendee.uid}>
             <Flex alignItems={'center'}>
               <input type={'checkbox'} checked={attendee.submissionStatus} readOnly />
-              <Text ml={2}>{`${attendee.userNm} (${attendee.birth})`}</Text>
+              <Text ml={2}>{`${attendee.userName}`}</Text>
               <Button ml={2} onClick={() => handleProfileClick(attendee)}>
                 View Profile
               </Button>
@@ -106,13 +109,8 @@ const Admin = () => {
             <ModalHeader>Profile</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Image
-                borderRadius={'full'}
-                boxSize={'100px'}
-                src={selectedProfile.profilePictureUrl}
-                alt={'Profile Picture'}
-              />
-              <Text mt={4}>{`${selectedProfile.name} (${selectedProfile.birthdate})`}</Text>
+              <Image borderRadius={'full'} boxSize={'100px'} src={''} alt={'Profile Picture'} />
+              <Text mt={4}>{`${selectedProfile.username} (${selectedProfile.birth})`}</Text>
             </ModalBody>
             <ModalFooter>
               <Button colorScheme={'blue'} mr={3} onClick={onClose}>

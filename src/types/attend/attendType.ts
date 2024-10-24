@@ -4,4 +4,5 @@ export interface IAttendDetailDatas {
   attendImgUrl: string;
   uid: string;
   userName: string;
+  submissionStatus: boolean;
 }
