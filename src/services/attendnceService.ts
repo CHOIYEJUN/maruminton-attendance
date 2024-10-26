@@ -25,6 +25,7 @@ export const insertStemp = async (questImgUrl: string, questImgPath: string) => 
       attendData: nowData,
       attendImgUrl: questImgUrl,
       attendImgPath: questImgPath,
+      submissionStatus: false,
     });
     return 'success';
   } catch (error) {

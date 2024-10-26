@@ -17,13 +17,13 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Select,
   Text,
   useDisclosure,
 } from '@chakra-ui/react';
 
+import LabelInput from '@components/input/LabelInput';
+
 import { IAttendDetailDatas } from '@/types/attend/attendType';
-import { ICreateUserFieldProps } from '@/types/auth/createAccount';
 
 import { getNowData } from '@utils/dateUtil';
 
@@ -35,24 +35,34 @@ const Admin = () => {
   const [selectedDate, setSelectedDate] = useState(getNowData());
   const [attendanceList, setAttendanceList] = useState<IAttendDetailDatas[]>([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [selectedProfile, setSelectedProfile] = useState<ICreateUserFieldProps>(null);
+  const [selectedProfile, setSelectedProfile] = useState<IAttendDetailDatas>();
 
   useEffect(() => {
     const fetchAttendanceData = async () => {
       const q = query(collection(db, 'attendance'), where('date', '==', selectedDate));
       const querySnapshot = await getDocs(q);
-      const data: IAttendDetailDatas[] = querySnapshot.docs.map((doc) => doc.data());
+      const data: IAttendDetailDatas[] = querySnapshot.docs.map((doc) => {
+        const docData = doc.data();
+        return {
+          attendData: docData.attendData,
+          attendImgPath: docData.attendImgPath,
+          attendImgUrl: docData.attendImgUrl,
+          uid: docData.uid,
+          userName: docData.userName,
+          submissionStatus: docData.submissionStatus,
+        } as IAttendDetailDatas;
+      });
       setAttendanceList(data);
     };
 
     fetchAttendanceData();
   }, [selectedDate, db]);
 
-  const handleDateChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedDate(event.target.value);
+  const handleDateChange = (value: string) => {
+    setSelectedDate(value);
   };
 
-  const handleProfileClick = (profile: ICreateUserFieldProps) => {
+  const handleProfileClick = (profile: IAttendDetailDatas) => {
     setSelectedProfile(profile);
     onOpen();
   };
@@ -79,9 +89,12 @@ const Admin = () => {
       </Flex>
 
       <Box mb={4}>
-        <Select value={selectedDate} onChange={handleDateChange}>
-          <option value={getNowData()}>{getNowData()}</option>
-        </Select>
+        <LabelInput
+          label={'Date'}
+          type={'date'}
+          value={selectedDate}
+          setValue={(value: string) => handleDateChange(value)}
+        />
       </Box>
 
       <List spacing={2}>
@@ -109,8 +122,13 @@ const Admin = () => {
             <ModalHeader>Profile</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-              <Image borderRadius={'full'} boxSize={'100px'} src={''} alt={'Profile Picture'} />
-              <Text mt={4}>{`${selectedProfile.username} (${selectedProfile.birth})`}</Text>
+              <Image
+                borderRadius={'full'}
+                boxSize={'100px'}
+                src={selectedProfile?.attendImgUrl}
+                alt={'Profile Picture'}
+              />
+              <Text mt={4}>{`${selectedProfile?.userName}`}</Text>
             </ModalBody>
             <ModalFooter>
               <Button colorScheme={'blue'} mr={3} onClick={onClose}>
