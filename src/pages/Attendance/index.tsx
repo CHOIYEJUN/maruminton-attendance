@@ -81,7 +81,7 @@ const Attendance = () => {
     const storage = getStorage();
     const userId = auth.currentUser?.uid;
     const today = new Date().toISOString().slice(0, 10);
-    const imgRef = ref(storage, `attendance/${userId}/${today}/myImg`);
+    const imgRef = ref(storage, `attendance/${userId}/${today}/attendList`);
 
     try {
       await uploadBytes(imgRef, file);
