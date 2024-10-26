@@ -39,7 +39,7 @@ const Admin = () => {
 
   useEffect(() => {
     const fetchAttendanceData = async () => {
-      const q = query(collection(db, 'attendance'), where('date', '==', selectedDate));
+      const q = query(collection(db, 'attend'), where('attendData', '==', selectedDate));
       const querySnapshot = await getDocs(q);
       const data: IAttendDetailDatas[] = querySnapshot.docs.map((doc) => {
         const docData = doc.data();
