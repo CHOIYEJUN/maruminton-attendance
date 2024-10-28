@@ -43,8 +43,6 @@ const Admin = () => {
       const querySnapshot = await getDocs(q);
       const data: IAttendDetailDatas[] = querySnapshot.docs.map((doc) => {
         const docData = doc.data();
-
-
         return {
           attendData: docData.attendData,
           attendImgPath: docData.attendImgPath,
