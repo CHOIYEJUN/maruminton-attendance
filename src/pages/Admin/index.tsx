@@ -72,7 +72,7 @@ const Admin = () => {
       await addDoc(collection(db, 'attendance'), { date: selectedDate, data: attendanceList });
       console.log('Attendance list saved');
     } catch (error) {
-      console.error('Error saving attendance list: ', error);
+      console.error('Error saving attendance list:', error);
     }
   };
 
