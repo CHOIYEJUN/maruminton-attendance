@@ -47,7 +47,7 @@ const Attendance = () => {
       const insertStempState = await insertStemp(callBack?.url, callBack?.imgPath);
       setIsLoding(false);
       if (insertStempState === 'success') {
-        navigate('/todayDoen');
+        navigate('/attendList');
       } else if (insertStempState === 'fail') {
         toast({
           title: '오류',
@@ -62,7 +62,7 @@ const Attendance = () => {
           status: 'error',
           isClosable: true,
         });
-        navigate('/myState');
+        navigate('/attendList');
       }
     } else {
       toast({

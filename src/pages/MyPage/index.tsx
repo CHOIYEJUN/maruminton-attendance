@@ -1,27 +1,36 @@
 import { useEffect, useState } from 'react';
 
 import { getAuth } from 'firebase/auth';
+import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
 
 import { Box, Flex, Img, List, ListItem, Select, Text } from '@chakra-ui/react';
 
 const MyPage = () => {
   const auth = getAuth();
   const user = auth.currentUser;
+  const db = getFirestore();
 
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
   const [attendanceDates, setAttendanceDates] = useState<string[]>([]);
 
   useEffect(() => {
-    // Fetch attendance data for the selected month
-    // This is a placeholder, replace with actual data fetching logic
     const fetchAttendanceData = async () => {
-      // Example data
-      const data = ['2023-10-01', '2023-10-05', '2023-10-12'];
+      const startOfMonth = new Date(Date.UTC(new Date().getFullYear(), selectedMonth - 1, 1));
+      const endOfMonth = new Date(Date.UTC(new Date().getFullYear(), selectedMonth, 0));
+
+      const q = query(
+        collection(db, 'attendance'),
+        where('attendData', '>=', startOfMonth.toISOString().split('T')[0]),
+        where('attendData', '<=', endOfMonth.toISOString().split('T')[0]),
+      );
+
+      const querySnapshot = await getDocs(q);
+      const data = querySnapshot.docs.map((doc) => doc.data().date);
       setAttendanceDates(data);
     };
 
     fetchAttendanceData();
-  }, [selectedMonth]);
+  }, [selectedMonth, db]);
 
   const handleMonthChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedMonth(parseInt(event.target.value, 10));
