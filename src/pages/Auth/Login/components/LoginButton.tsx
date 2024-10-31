@@ -41,7 +41,7 @@ const LoginButton = () => {
       // 로그인 성공 시 유저 정보 로컬 스토리지에 저장
       localStorage.setItem('userEmail', user.email || '');
       localStorage.setItem('userName', user.displayName || 'Unknown');
-      localStorage.setItem('userDOB', '1990-01-01'); // 생년월일은 추가 정보로 받아서 저장하는 방식 필요
+      localStorage.setItem('uid', user.uid);
 
       console.log('로그인 성공:', user.email);
       navigate('/');

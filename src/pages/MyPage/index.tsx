@@ -17,15 +17,20 @@ const MyPage = () => {
     const fetchAttendanceData = async () => {
       const startOfMonth = new Date(Date.UTC(new Date().getFullYear(), selectedMonth - 1, 1));
       const endOfMonth = new Date(Date.UTC(new Date().getFullYear(), selectedMonth, 0));
+      const userId = localStorage.getItem('uid');
 
       const q = query(
-        collection(db, 'attendance'),
+        collection(db, 'attend'),
         where('attendData', '>=', startOfMonth.toISOString().split('T')[0]),
         where('attendData', '<=', endOfMonth.toISOString().split('T')[0]),
+        where('uid', '==', userId),
       );
 
       const querySnapshot = await getDocs(q);
-      const data = querySnapshot.docs.map((doc) => doc.data().date);
+      const data = querySnapshot.docs.map((doc) => {
+        console.log(doc.data()); // 각 문서의 데이터를 출력하여 구조 확인
+        return doc.data().attendData;
+      });
       setAttendanceDates(data);
     };
 
