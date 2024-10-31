@@ -17,11 +17,13 @@ const MyPage = () => {
     const fetchAttendanceData = async () => {
       const startOfMonth = new Date(Date.UTC(new Date().getFullYear(), selectedMonth - 1, 1));
       const endOfMonth = new Date(Date.UTC(new Date().getFullYear(), selectedMonth, 0));
+      const userId = localStorage.getItem('uid');
 
       const q = query(
         collection(db, 'attend'),
         where('attendData', '>=', startOfMonth.toISOString().split('T')[0]),
         where('attendData', '<=', endOfMonth.toISOString().split('T')[0]),
+        where('uid', '==', userId),
       );
 
       const querySnapshot = await getDocs(q);
