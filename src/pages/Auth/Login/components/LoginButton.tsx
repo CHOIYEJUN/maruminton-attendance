@@ -40,7 +40,7 @@ const LoginButton = () => {
 
       // 로그인 성공 시 유저 정보 로컬 스토리지에 저장
       localStorage.setItem('userEmail', user.email || '');
-      localStorage.setItem('userName', user.displayName || 'Unknown');
+      localStorage.setItem('userName', user.displayName || '');
       localStorage.setItem('uid', user.uid);
 
       console.log('로그인 성공:', user.email);
