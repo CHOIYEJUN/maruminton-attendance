@@ -42,7 +42,6 @@ const LoginButton = () => {
       localStorage.setItem('userEmail', user.email || '');
       localStorage.setItem('userName', user.displayName || '');
       localStorage.setItem('uid', user.uid);
-
       console.log('로그인 성공:', user.email);
       navigate('/');
     } catch (error) {
